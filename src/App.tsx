@@ -12,7 +12,8 @@ export default function App() {
     cutoff: 3500,
     resonance: 3,
     attack: 0.05,
-octave: 0,
+    release: 0.6,
+    octave: 0,
     volume: 0.6,
   });
 

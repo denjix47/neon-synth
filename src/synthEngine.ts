@@ -5,7 +5,10 @@ class SynthEngine {
   private filterNode: BiquadFilterNode | null = null;
   private masterGain: GainNode | null = null;
   private analyserNode: AnalyserNode | null = null;
-  private activeVoices: Map<number, { osc: OscillatorNode;}> = new Map(); return;
+  private activeVoices: Map<number, { osc: OscillatorNode; gain: GainNode }> = new Map();
+
+  private init() {
+    if (this.audioCtx) return;
     const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     this.audioCtx = new AudioContextClass();
 
