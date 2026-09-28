@@ -5,6 +5,7 @@ import { Sliders, Activity, Volume2, Sparkles, Layers } from 'lucide-react';
 interface SynthControlsProps {
   params: SynthParams;
   onChange: (newParams: SynthParams) => void;
+  theme: VisualizerTheme;
   onThemeChange: (newTheme: VisualizerTheme) => void;
 }
 
@@ -233,7 +234,10 @@ export const SynthControls: React.FC<SynthControlsProps> = ({
               aria-valuenow={params.volume}
               aria-valuetext={`${Math.round(params.volume * 100)} percent`}
               onChange={(e) => updateParam('volume', parseFloat(e.target.value))}
-              className="w-full accent-sky-400 cursor-pointer h-2 bg-zinc-800 rounded-lg focus:outline-none focus-focus-visible:ring-sky-400"        </div>
+              className="w-full accent-sky-400 cursor-pointer h-2 bg-zinc-800 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
