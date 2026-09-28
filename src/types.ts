@@ -3,7 +3,8 @@ export type WaveformType = 'sawtooth' | 'square' | 'sine' | 'triangle';
 export type VisualizerTheme = 'neon-grid' | 'cosmic-spheres' | 'quantum-waves';
 
 export interface SynthParams {
-cutoff: number;
+  waveform: WaveformType;
+  cutoff: number;
   resonance: number;
   attack: number;
   release: number;

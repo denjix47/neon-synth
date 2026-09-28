@@ -4,18 +4,23 @@ import { synthEngine } from './synthEngine';
 
 interface KeyboardProps {
   params: SynthParams;
-  onActiveNotesnumber) => void; [
+  onActiveNotesChange: (count: number) => void;
+}
+
+const NOTES_LIST: PianoNote[] = [
   { note: 'C', midi: 60, isBlack: false, keyChar: 'A', frequency: 261.63 },
   { note: 'C#', midi: 61, isBlack: true, keyChar: 'W', frequency: 277.18 },
   { note: 'D', midi: 62, isBlack: false, keyChar: 'S', frequency: 293.66 },
-  { note: 'D#', midi: 63,, keyChar: 'E', frequency: 311.13 },midi: 64, isBlack: false, keyChar: 'D', frequency: 329.63 },
+  { note: 'D#', midi: 63, isBlack: true, keyChar: 'E', frequency: 311.13 },
+  { note: 'E', midi: 64, isBlack: false, keyChar: 'D', frequency: 329.63 },
   { note: 'F', midi: 65, isBlack: false, keyChar: 'F', frequency: 349.23 },
   { note: 'F#', midi: 66, isBlack: true, keyChar: 'T', frequency: 369.99 },
   { note: 'G', midi: 67, isBlack: false, keyChar: 'G', frequency: 392.00 },
   { note: 'G#', midi: 68, isBlack: true, keyChar: 'Y', frequency: 415.30 },
   { note: 'A', midi: 69, isBlack: false, keyChar: 'H', frequency: 440.00 },
   { note: 'A#', midi: 70, isBlack: true, keyChar: 'U', frequency: 466.16 },
-  { note: 'B', midi: 71, isBlack: false,frequency: 493.88 },', midi: 72, isBlack: false, keyChar: 'K', frequency: 523.25 },
+  { note: 'B', midi: 71, isBlack: false, keyChar: 'J', frequency: 493.88 },
+  { note: 'C5', midi: 72, isBlack: false, keyChar: 'K', frequency: 523.25 },
   { note: 'C#5', midi: 73, isBlack: true, keyChar: 'O', frequency: 554.37 },
   { note: 'D5', midi: 74, isBlack: false, keyChar: 'L', frequency: 587.33 },
   { note: 'D#5', midi: 75, isBlack: true, keyChar: 'P', frequency: 622.25 },
@@ -81,7 +86,9 @@ export const Keyboard: React.FC<KeyboardProps> = ({ params, onActiveNotesChange 
     <div className="w-full flex flex-col gap-4 bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-xl">
       <div className="flex justify-between items-center px-1">
         <h3 className="text-sm font-semibold tracking-wider text-slate-400 uppercase">Interactive Keybed</h3>
-        <span className="text-xs text-slate-500 font-mono">Use Mouse orW S E D F T G Y H U J K O L P ;</span>      <div className="relative flex justify-center items-start h-40 select-none overflow-x-auto py-2">
+        <span className="text-xs text-slate-500 font-mono">Use Mouse or A W S E D F T G Y H U J K O L P ;</span>
+      </div>
+      <div className="relative flex justify-center items-start h-40 select-none overflow-x-auto py-2">
         {NOTES_LIST.map((note) => {
           const isActive = activeNotes.has(note.midi);
           

@@ -4,6 +4,7 @@ import { synthEngine } from './synthEngine';
 import { VisualizerTheme } from './types';
 
 interface Visualizer3DProps {
+  theme: VisualizerTheme;
   activeNotesCount: number;
 }
 
@@ -11,6 +12,8 @@ export const Visualizer3D: React.FC<Visualizer3DProps> = ({ theme, activeNotesCo
   const mountRef = useRef<HTMLDivElement>(null);
   const themeRef = useRef<VisualizerTheme>(theme);
   themeRef.current = theme;
+  const activeNotesRef = useRef(activeNotesCount);
+  activeNotesRef.current = activeNotesCount;
 
   useEffect(() => {
     const container = mountRef.current;
@@ -99,7 +102,8 @@ export const Visualizer3D: React.FC<Visualizer3DProps> = ({ theme, activeNotesCo
       color: 0x00ffff,
       transparent: true,
       opacity: 0.8,
-      bl});
+      blending: THREE.AdditiveBlending,
+    });
     const particleSystem = new THREE.Points(particleGeo, particleMat);
     mainGroup.add(particleSystem);
 
@@ -148,7 +152,7 @@ export const Visualizer3D: React.FC<Visualizer3DProps> = ({ theme, activeNotesCo
 
       coreMesh.rotation.x = t * 0.5;
       coreMesh.rotation.y = t * 0.8;
-      const scale = 1 + freqNormalized * 0.8 + (activeNotesCount > 0 ? 0.2 : 0);
+      const scale = 1 + freqNormalized * 0.8 + (activeNotesRef.current > 0 ? 0.2 : 0);
       coreMesh.scale.set(scale, scale, scale);
 
       pointLight.intensity = 1.5 + freqNormalized * 3;
@@ -203,7 +207,7 @@ export const Visualizer3D: React.FC<Visualizer3DProps> = ({ theme, activeNotesCo
       }
       renderer.dispose();
     };
-  }, [activeNotesCount]);
+  }, []);
 
   return (
     <div className="relative w-full h-full min-h-[300px] overflow-hidden rounded-xl border border-slate-800 bg-slate-950/80 shadow-2xl">

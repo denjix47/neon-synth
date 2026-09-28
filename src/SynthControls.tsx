@@ -46,7 +46,8 @@ export const SynthControls: React.FC<SynthControlsProps> = ({
               className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
                 theme === t.id
                   ? 'bg-fuchsia-600 text-white shadow-md'
-                  : 'text-slate-400}`}
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
             >
               {t.label}
             </button>
@@ -89,7 +90,8 @@ export const SynthControls: React.FC<SynthControlsProps> = ({
                   className={`flex-1 py-1 text-xs font-mono rounded border ${
                     params.octave === oct
                       ? 'bg-cyan-600 text-white border-cyan-400 font-bold'
-                      : 'bg-slate-900 text-slate-400 border-slate-800}`}
+                      : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700'
+                  }`}
                 >
                   {oct > 0 ? `+${oct}` : oct}
                 </button>
