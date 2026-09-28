@@ -12,10 +12,8 @@ const NOTES_LIST: PianoNote[] = [
   { note: 'C#', midi: 61, isBlack: true, keyChar: 'W', frequency: 277.18 },
   { note: 'D', midi: 62, isBlack: false, keyChar: 'S', frequency: 293.66 },
   { note: 'D#', midi: 63, isBlack: true, keyChar: 'E', frequency: 311.13 },
-  { note: 'E', midi: 64, isBlack: false, keyChar: 'D', frequency: 329.63 },
-  { note: 'F', midi: 65, isBlack: false, keyChar: 'F', frequency: 349.23 },
-  { note: 'F#', midi: 66, isBlack: true, keyChar: 'T', frequency: 369.99 },
-  { note: 'G', midi: 67, isBlack: false, keyChar: 'G', frequency: 392.00 },
+  { note: 'E', midi: 64, isBlack: false,frequency: 329.63 },isBlack: false, keyChar: 'F', frequency: 349.23 },
+  { note: 'F#', midi: 66, isBlack: true, keyfrequency: 369.99 },: 67, isBlack: false, keyChar: 'G', frequency: 392.00 },
   { note: 'G#', midi: 68, isBlack: true, keyChar: 'Y', frequency: 415.30 },
   { note: 'A', midi: 69, isBlack: false, keyChar: 'H', frequency: 440.00 },
   { note: 'A#', midi: 70, isBlack: true, keyChar: 'U', frequency: 466.16 },
@@ -83,12 +81,17 @@ export const Keyboard: React.FC<KeyboardProps> = ({ params, onActiveNotesChange 
   }, []);
 
   return (
-    <div className="w-full flex flex-col gap-4 bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-xl">
-      <div className="flex justify-between items-center px-1">
-        <h3 className="text-sm font-semibold tracking-wider text-slate-400 uppercase">Interactive Keybed</h3>
-        <span className="text-xs text-slate-500 font-mono">Use Mouse or A W S E D F T G Y H U J K O L P ;</span>
+    <section aria-label="Synthesizer Keyboard" className="w-full flex flex-col gap-4 bg-zinc-900 p-6 rounded-xl border border-zinc-800 shadow-xl">
+      <div className="flex flex-wrap justify-between items-center gap-2 px-1">
+        <h3 className="text-sm font-semibold tracking-wider text-zinc-300 uppercase">Interactive Keybed</h3>
+        <span className="text-xs text-zinc-400 font-mono">Keys: A W S E D F T G Y H U J K O L P ;</span>
       </div>
-      <div className="relative flex justify-center items-start h-40 select-none overflow-x-auto py-2">
+
+      <div
+        role="region"
+        aria-label="Piano Keys"
+        className="relative flex justify-center items-start h-40 select-none overflow-x-auto py-2"
+      >
         {NOTES_LIST.map((note) => {
           const isActive = activeNotes.has(note.midi);
           
@@ -100,42 +103,72 @@ export const Keyboard: React.FC<KeyboardProps> = ({ params, onActiveNotesChange 
             return (
               <button
                 key={note.midi}
+                type="button"
+                aria-label={`Key ${note.note}, trigger with key ${note.keyChar}`}
+                aria-pressed={isActive}
                 onMouseDown={() => triggerNoteOn(note.midi)}
                 onMouseUp={() => triggerNoteOff(note.midi)}
                 onMouseLeave={() => activeNotes.has(note.midi) && triggerNoteOff(note.midi)}
                 onTouchStart={(e) => { e.preventDefault(); triggerNoteOn(note.midi); }}
                 onTouchEnd={(e) => { e.preventDefault(); triggerNoteOff(note.midi); }}
-                className={`absolute z-10 w-7 h-24 rounded-b border-x border-b border-black shadow-md transition-all duration-75 flex flex-col justify-end pb-2 items-center ${
+                onKeyDown={(e) => {
+                  if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    triggerNoteOn(note.midi);
+                  }
+                }}
+                onKeyUp={(e) => {
+                  if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    triggerNoteOff(note.midi);
+                  }
+                }}
+                className={`absolute z-10 w-7 h-24 rounded-b border-x border-b border-black shadow-md transition-all duration-75 flex flex-col justify-end pb-2 items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${
                   isActive
-                    ? 'bg-fuchsia-600 border-fuchsia-800 shadow-inner'
-                    : 'bg-slate-950 hover:bg-slate-800 border-slate-950'
+                    ? 'bg-sky-500 border-sky-600 shadow-inner'
+                    : 'bg-zinc-950 hover:bg-zinc-800 border-zinc-950'
                 }`}
                 style={{ left: leftPos }}
               >
-                <span className="text-[10px] font-mono text-slate-400">{note.keyChar}</span>
+                <span className="text-[10px] font-mono text-zinc-300 font-medium">{note.keyChar}</span>
               </button>
             );
           } else {
             return (
               <button
                 key={note.midi}
+                type="button"
+                aria-label={`Key ${note.note}, trigger with key ${note.keyChar}`}
+                aria-pressed={isActive}
                 onMouseDown={() => triggerNoteOn(note.midi)}
                 onMouseUp={() => triggerNoteOff(note.midi)}
                 onMouseLeave={() => activeNotes.has(note.midi) && triggerNoteOff(note.midi)}
                 onTouchStart={(e) => { e.preventDefault(); triggerNoteOn(note.midi); }}
                 onTouchEnd={(e) => { e.preventDefault(); triggerNoteOff(note.midi); }}
-                className={`flex-1 min-w-[36px] max-w-[48px] h-36 rounded-b border border-slate-700/60 transition-all duration-75 flex flex-col justify-end pb-3 items-center ${
+                onKeyDown={(e) => {
+                  if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    triggerNoteOn(note.midi);
+                  }
+                }}
+                onKeyUp={(e) => {
+                  if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    triggerNoteOff(note.midi);
+                  }
+                }}
+                className={`flex-1 min-w-[36px] max-w-[48px] h-36 rounded-b border border-zinc-400 transition-all duration-75 flex flex-col justify-end pb-3 items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 ${
                   isActive
-                    ? 'bg-gradient-to-t from-cyan-500 to-cyan-300 text-slate-900 border-cyan-400 shadow-inner translate-y-0.5'
-                    : 'bg-white hover:bg-slate-100 text-slate-800 shadow-md'
+                    ? 'bg-sky-400 text-zinc-950 border-sky-500 shadow-inner translate-y-0.5'
+                    : 'bg-zinc-100 hover:bg-white text-zinc-900 shadow-sm'
                 }`}
               >
-                <span className="text-[11px] font-bold font-mono select-none opacity-80">{note.keyChar}</span>
+                <span className="text-xs font-bold font-mono select-none text-zinc-900">{note.keyChar}</span>
               </button>
             );
           }
         })}
       </div>
-    </div>
+    </section>
   );
 };
