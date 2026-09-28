@@ -4,6 +4,7 @@ class SynthEngine {
   private audioCtx: AudioContext | null = null;
   private filterNode: BiquadFilterNode | null = null;
   private masterGain: GainNode | null = null;
+  private compressorNode: DynamicsCompressorNode | null = null;
   private analyserNode: AnalyserNode | null = null;
   private activeVoices: Map<number, { osc: OscillatorNode; gain: GainNode }> = new Map();
 
@@ -20,12 +21,16 @@ class SynthEngine {
     this.masterGain = this.audioCtx.createGain();
     this.masterGain.gain.value = 0.5;
 
+    // Master limiter to prevent clipping on chords
+    this.compressorNode = this.audioCtx.createDynamicsCompressor();
+
     this.analyserNode = this.audioCtx.createAnalyser();
     this.analyserNode.fftSize = 256;
     this.analyserNode.smoothingTimeConstant = 0.8;
 
     this.filterNode.connect(this.masterGain);
-    this.masterGain.connect(this.analyserNode);
+    this.masterGain.connect(this.compressorNode);
+    this.compressorNode.connect(this.analyserNode);
     this.analyserNode.connect(this.audioCtx.destination);
   }
 
@@ -73,8 +78,11 @@ class SynthEngine {
     const voiceGain = this.audioCtx.createGain();
     voiceGain.gain.setValueAtTime(0.0001, now);
     
+    // Dynamic polyphony gain scaling to prevent clipping
+    const currentActiveCount = this.activeVoices.size + 1;
+    const targetGain = Math.min(0.4, 0.85 / Math.sqrt(currentActiveCount));
     const attackEnd = now + Math.max(0.005, params.attack);
-    voiceGain.gain.linearRampToValueAtTime(0.8, attackEnd);
+    voiceGain.gain.linearRampToValueAtTime(targetGain, attackEnd);
 
     osc.connect(voiceGain);
     voiceGain.connect(this.filterNode);
